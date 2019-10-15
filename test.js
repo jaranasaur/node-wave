@@ -1,6 +1,6 @@
 const fs = require('fs');
-const { createWavFileBuffer } = require('./waveNew');
-
+const { createWavFileBuffer } = require('./index');
+const startTime = Date.now();
 // create audio folder if it doesn't exist
 const audioFolder = './audio';
 if (!fs.existsSync(audioFolder)) {
@@ -15,23 +15,26 @@ const bytesPerSample = bitDepth / 8;
 
 const samples = new Uint8Array(sampleRate * bytesPerSample);
 
-const sampleLength = Math.PI * 2 / 440;
+const sampleLength = 1 / sampleRate; // length of time between samples
+const periodLength = 1 / 440; // length of time of 1 period
+const sineStep = sampleLength / periodLength / Math.PI * 2; // value to pass to sine function
 
 const maxUInt = Math.pow(2, bitDepth) - 1;
 const maxInt = (maxUInt + 1) / 2;
 
-// calculate floating point samples
 for (let i = 0; i < samples.byteLength; i += bytesPerSample) {
-  realVal = Math.sin(i * sampleLength);
+  realVal = Math.sin((i/3) * sineStep);
   quantizedVal = Math.round(realVal * maxUInt);
-  le = _toLittleEndian(quantizedVal - maxInt, bytesPerSample);
+  let le = _toLittleEndian(quantizedVal, bytesPerSample);
   for (let ii = 0; ii < le.length; ii += 1) {
     samples[i + ii] = le[ii];
   }
 }
 
 fs.writeFileSync(`${audioFolder}/file2.wav`, createWavFileBuffer(numberOfChannels, sampleRate, bitDepth, samples));
-createWavFileBuffer()
+
+console.log(`finished in: ${Date.now() - startTime} ms`);
+
 function _toLittleEndian(decimalValue, byteCount) {
   const returnArr = [];
   for (let i = 0; i < byteCount; i += 1) {

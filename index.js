@@ -1,9 +1,11 @@
 /**
+ * Creates a Uint8Array in WAV audio file format
  * @param {number} numChannels Number of audio channels (1 for mono, 2 for stereo, etc.)
  * @param {number} sampleRate Number of samples of audio per second
  * @param {number} bitsPerSample Size of each sample in number of bits
  * @param {Uint8Array} samples Byte array containing audio samples
- * @param {Object} [options={toLittleEndian: false}] Additional options
+ * @param {Object} [options] Additional options
+ * @param {boolean} options.toLittleEndian Converts samples from big-endian byte order to little-endian byte
  * @returns {Uint8Array}
 */
 function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, options = { toLittleEndian: false }) { 
