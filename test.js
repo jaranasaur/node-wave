@@ -31,7 +31,7 @@ for (let i = 0; i < samples.byteLength; i += bytesPerSample) {
 }
 
 fs.writeFileSync(`${audioFolder}/file2.wav`, createWavFileBuffer(numberOfChannels, sampleRate, bitDepth, samples));
-
+createWavFileBuffer()
 function _toLittleEndian(decimalValue, byteCount) {
   const returnArr = [];
   for (let i = 0; i < byteCount; i += 1) {

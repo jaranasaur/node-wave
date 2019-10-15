@@ -1,7 +1,15 @@
-function createWavFileBuffer(numberOfChannels, sampleRate, bitsPerSample, samples, options = { toLittleEndian: false }) { 
+/**
+ * @param {number} numChannels Number of audio channels (1 for mono, 2 for stereo, etc.)
+ * @param {number} sampleRate Number of samples of audio per second
+ * @param {number} bitsPerSample Size of each sample in number of bits
+ * @param {Uint8Array} samples Byte array containing audio samples
+ * @param {Object} [options={toLittleEndian: false}] Additional options
+ * @returns {Uint8Array}
+*/
+function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, options = { toLittleEndian: false }) { 
   const headerSize = 44;
   const bytesPerSample = bitsPerSample / 8;
-  const blockAlign = numberOfChannels * bytesPerSample;
+  const blockAlign = numChannels * bytesPerSample;
   const byteRate = sampleRate * blockAlign;
 
   // uint array to store all the data (44 bytes for header and metadata)
@@ -23,7 +31,7 @@ function createWavFileBuffer(numberOfChannels, sampleRate, bitsPerSample, sample
   wavBuffer[20] = 0x01;
 
   // Number of Channels, little-endian
-  wavBuffer.set(_toLittleEndian(numberOfChannels, 2), 22);
+  wavBuffer.set(_toLittleEndian(numChannels, 2), 22);
 
   // Sample Rate, little-endian
   wavBuffer.set(_toLittleEndian(sampleRate, 4), 24);
