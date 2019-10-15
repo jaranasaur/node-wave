@@ -1,0 +1,19 @@
+{
+  "name": "node-wave",
+  "version": "0.1.0",
+  "description": "Encodes PCM audio to a buffer in WAV file format",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaranasaur/node-wave.git"
+  },
+  "author": "Jared Oliver",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaranasaur/node-wave/issues"
+  },
+  "homepage": "https://github.com/jaranasaur/node-wave#readme"
+}
