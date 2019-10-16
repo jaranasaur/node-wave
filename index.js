@@ -51,7 +51,7 @@ function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, op
   wavBuffer.set([100, 97, 116, 97], 36);
 
   // Sub Chunk 2 Size (size of all samples), little-endian
-  wavBuffer.set(_toLittleEndian(samples.byteLength * blockAlign, 4), 40);
+  wavBuffer.set(_toLittleEndian(samples.byteLength, 4), 40);
 
   // Audio samples
   // convert samples to little-endian
