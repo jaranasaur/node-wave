@@ -23,8 +23,8 @@ const maxUInt = Math.pow(2, bitDepth) - 1;
 const maxInt = (maxUInt + 1) / 2;
 
 for (let i = 0; i < samples.byteLength; i += bytesPerSample) {
-  realVal = Math.sin((i/3) * sineStep);
-  quantizedVal = Math.round(realVal * maxUInt);
+  const realVal = Math.sin((i/3) * sineStep);
+  const quantizedVal = Math.round(realVal * maxInt);
   let le = _toLittleEndian(quantizedVal, bytesPerSample);
   for (let ii = 0; ii < le.length; ii += 1) {
     samples[i + ii] = le[ii];
