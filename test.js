@@ -17,13 +17,13 @@ const samples = new Uint8Array(sampleRate * bytesPerSample);
 
 const sampleLength = 1 / sampleRate; // length of time between samples
 const periodLength = 1 / 440; // length of time of 1 period
-const sineStep = sampleLength / periodLength / Math.PI * 2; // value to pass to sine function
+const sineStep = (sampleLength / periodLength) * Math.PI * 2; // value to pass to sine function
 
 const maxUInt = Math.pow(2, bitDepth) - 1;
-const maxInt = (maxUInt + 1) / 2;
+const maxInt = (maxUInt + 1) / 2 - 1;
 
 for (let i = 0; i < samples.byteLength; i += bytesPerSample) {
-  const realVal = Math.sin((i/3) * sineStep);
+  const realVal = Math.sin((i/bytesPerSample) * sineStep);
   const quantizedVal = Math.round(realVal * maxInt);
   let le = _toLittleEndian(quantizedVal, bytesPerSample);
   for (let ii = 0; ii < le.length; ii += 1) {
