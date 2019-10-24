@@ -1,6 +1,8 @@
 const fs = require('fs');
 const { createWavFileBuffer } = require('./index');
+
 const startTime = Date.now();
+
 // create audio folder if it doesn't exist
 const audioFolder = './audio';
 if (!fs.existsSync(audioFolder)) {
@@ -10,13 +12,14 @@ if (!fs.existsSync(audioFolder)) {
 const sampleRate = 48000;
 const numberOfChannels = 1;
 const bitDepth = 24;
+const signalLength = 1; // length of file in seconds
 
 const bytesPerSample = bitDepth / 8;
 
-const samples = new Uint8Array(sampleRate * bytesPerSample);
+const samples = new Uint8Array(sampleRate * bytesPerSample * signalLength);
 
 const sampleLength = 1 / sampleRate; // length of time between samples
-const periodLength = 1 / 440; // length of time of 1 period
+const periodLength = 1 / 45; // length of time of 1 period
 const sineStep = (sampleLength / periodLength) * Math.PI * 2; // value to pass to sine function
 
 const maxUInt = Math.pow(2, bitDepth) - 1;
