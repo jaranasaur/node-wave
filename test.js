@@ -9,12 +9,12 @@ if (!fs.existsSync(audioFolder)) {
 
 const testCases = [
   { sampleRate: 48000, bitDepth: 24 },
-  // { sampleRate: 48000, bitDepth: 16 },
-  // { sampleRate: 48000, bitDepth: 8 },
+  { sampleRate: 48000, bitDepth: 16 },
+  { sampleRate: 48000, bitDepth: 8 },
 ];
 
 const numberOfChannels = 1;
-const signalLength = 3600; // length of file in seconds
+const signalLength = 1; // length of file in seconds
 const periodLength = 1 / 4000; // length of time of 1 period
 
 testCases.forEach((testCase, index) => {
@@ -42,11 +42,12 @@ function runTest(sampleRate, bitDepth, index) {
     // for (let ii = 0; ii < le.length; ii += 1) {
     //   samples[i + ii] = le[ii];
     // }
+
     _toLittleEndian(quantizedVal, sampleBuffer);
-    samples.set(sampleBuffer, i);
-    // for (let ii = 0; ii < sampleBuffer.byteLength; ii += 1) {
-    //   samples[i + ii] = sampleBuffer[ii];
-    // }
+    // samples.set(sampleBuffer, i);
+    for (let ii = 0; ii < sampleBuffer.byteLength; ii += 1) {
+      samples[i + ii] = sampleBuffer[ii];
+    }
   }
   
   fs.writeFileSync(`${audioFolder}/test-${sampleRate}-${bitDepth}.wav`, createWavFileBuffer(numberOfChannels, sampleRate, bitDepth, samples));

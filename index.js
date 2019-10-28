@@ -1,14 +1,14 @@
 /**
  * Creates a Uint8Array in WAV audio file format
  * @param {number} numChannels Number of audio channels (1 for mono, 2 for stereo, etc.)
- * @param {number} sampleRate Number of samples of audio per second
- * @param {number} bitsPerSample Size of each sample in number of bits
- * @param {Uint8Array} samples Byte array containing audio samples
+ * @param {number} sampleRate Number of samples of audio per second (44100, 48000, etc.)
+ * @param {number} bitsPerSample Size of each sample in number of bits (8, 16, 24, etc.)
+ * @param {Uint8Array} samples Byte array containing audio sample data
  * @param {Object} [options] Additional options
- * @param {boolean} options.toLittleEndian Converts samples from big-endian byte order to little-endian byte
+ * @param {boolean} options.reverseSampleByteOrder Reverses the byte order for each sample. Converts from big-endian to little-endian and vice versa
  * @returns {Uint8Array}
 */
-function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, options = { toLittleEndian: false }) { 
+function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, options = { reverseSampleByteOrder: false }) { 
   const headerSize = 44;
   const bytesPerSample = bitsPerSample / 8;
   const blockAlign = numChannels * bytesPerSample;
@@ -21,7 +21,7 @@ function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, op
   wavBuffer.set([82, 73, 70, 70], 0);
 
   // Chunk Size (total number of bytes, not including 'RIFF' & 'WAVE' headers), little-endian
-  wavBuffer.set(_toLittleEndian(wavBuffer.byteLength - 8, 4), 4);
+  wavBuffer.set(_reverseByteOrder(wavBuffer.byteLength - 8, 4), 4);
 
   // 'WAVEfmt ' header
   wavBuffer.set([87, 65, 86, 69, 102, 109, 116, 32], 8);
@@ -33,29 +33,29 @@ function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, op
   wavBuffer[20] = 0x01;
 
   // Number of Channels, little-endian
-  wavBuffer.set(_toLittleEndian(numChannels, 2), 22);
+  wavBuffer.set(_reverseByteOrder(numChannels, 2), 22);
 
   // Sample Rate, little-endian
-  wavBuffer.set(_toLittleEndian(sampleRate, 4), 24);
+  wavBuffer.set(_reverseByteOrder(sampleRate, 4), 24);
 
   // Byte Rate, little-endian
-  wavBuffer.set(_toLittleEndian(byteRate, 4), 28);
+  wavBuffer.set(_reverseByteOrder(byteRate, 4), 28);
 
   // Block Align, little-endian
-  wavBuffer.set(_toLittleEndian(blockAlign, 2), 32);
+  wavBuffer.set(_reverseByteOrder(blockAlign, 2), 32);
 
   // Bits Per Sample, little-endian
-  wavBuffer.set(_toLittleEndian(bitsPerSample, 2), 34);
+  wavBuffer.set(_reverseByteOrder(bitsPerSample, 2), 34);
 
   // Sub Chunk 2 ID (ASCII 'data')
   wavBuffer.set([100, 97, 116, 97], 36);
 
   // Sub Chunk 2 Size (size of all samples), little-endian
-  wavBuffer.set(_toLittleEndian(samples.byteLength, 4), 40);
+  wavBuffer.set(_reverseByteOrder(samples.byteLength, 4), 40);
 
   // Audio samples
-  // convert samples to little-endian
-  if (options.toLittleEndian) {
+  // Reverses the byte order for each sample
+  if (options.reverseSampleByteOrder) {
     for (let i = 0; i < samples.byteLength; i += bytesPerSample) {
       // slice 1 sample out of the samples array and reverse it;
       wavBuffer.set(samples.slice(i, i + bytesPerSample).reverse(), i + headerSize);
@@ -68,7 +68,7 @@ function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, op
 }
 
 // converts a decimal number to byte array of specified size in little-endian order and returns it
-function _toLittleEndian(decimalValue, byteCount) {
+function _reverseByteOrder(decimalValue, byteCount) {
   const returnArr = [];
   for (let i = 0; i < byteCount; i += 1) {
     returnArr.push((decimalValue | -256) & 255);
