@@ -15,7 +15,7 @@ const testCases = [
 
 const numberOfChannels = 1;
 const signalLength = 1; // length of file in seconds
-const periodLength = 1 / 4000; // length of time of 1 period
+const periodLength = 1 / 440; // length of time of 1 period
 
 testCases.forEach((testCase, index) => {
   runTest(testCase.sampleRate, testCase.bitDepth, index);
