@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { toLittleEndian } = require('./helpers/Helper');
+const { toLittleEndian, decodeBytes } = require('./helpers/Helper');
 
 /**
  * Creates a Uint8Array in WAV audio file format
@@ -77,19 +77,26 @@ function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, op
 function readWavFile(wavFilePath) {
   const wavFileBuffer = fs.readFileSync(wavFilePath);
 
+  let numChannels, sampleRate, bitsPerSample, samples;
+
   for (let i = 0; i < wavFileBuffer.byteLength; i += 1) {
     if (wavFileBuffer[i] == "f".charCodeAt(0)) {
       if (wavFileBuffer[i + 1] == "m".charCodeAt(0)) {
         if (wavFileBuffer[i + 2] == "t".charCodeAt(0)) {
           if (wavFileBuffer[i + 3] == " ".charCodeAt(0)) {
-            console.log('found it!');
+            // if PCM audio
+            if (decodeBytes(wavFileBuffer, i + 8, 2) == 1) {
+              numChannels = decodeBytes(wavFileBuffer, i + 10, 2);
+              sampleRate = decodeBytes(wavFileBuffer, i + 12, 4);
+              bitsPerSample = decodeBytes(wavFileBuffer, i + 22, 4);
+            }
           }
         }
       }
     }
   }
 
-  // return { numChannels, sampleRate, bitsPerSample, samples };
+  return { numChannels, sampleRate, bitsPerSample, samples };
 }
 
 module.exports = { createWavFileBuffer, readWavFile };

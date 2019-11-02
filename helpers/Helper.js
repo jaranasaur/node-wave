@@ -12,6 +12,14 @@ class Helper {
     }
     return returnArr;
   }
+
+  static decodeBytes(bytes, offset, length) {
+    let hexString = `0x`;
+    for (let i = offset + length - 1; i >= offset; i -= 1) {
+      hexString = `${hexString}${bytes[i].toString(16).padStart(2, '0')}`;
+    }
+    return parseInt(hexString);
+  }
 }
 
 module.exports = Helper;
