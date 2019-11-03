@@ -1,8 +1,8 @@
 const fs = require('fs');
-const { createWavFileBuffer } = require('./index');
+const { createWavFileBuffer } = require('../index');
 
 // create audio folder if it doesn't exist
-const audioFolder = './audio';
+const audioFolder = '../audio';
 if (!fs.existsSync(audioFolder)) {
   fs.mkdirSync(audioFolder);
 }

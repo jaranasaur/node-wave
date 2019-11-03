@@ -72,11 +72,9 @@ function createWavFileBuffer(numChannels, sampleRate, bitsPerSample, samples, op
 
 /**
  * 
- * @param {string} wavFilePath Path to the .wav file
+ * @param {Buffer} wavFileBuffer Buffer containing WAV file data
  */
-function readWavFile(wavFilePath) {
-  const wavFileBuffer = fs.readFileSync(wavFilePath);
-
+function readWavFile(wavFileBuffer) {
   let numChannels, sampleRate, bitsPerSample, samples;
 
   for (let i = 0; i < wavFileBuffer.byteLength; i += 1) {

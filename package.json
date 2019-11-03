@@ -4,7 +4,7 @@
   "description": "Encodes PCM audio to a buffer in WAV file format",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node tests/test.js"
   },
   "repository": {
     "type": "git",
