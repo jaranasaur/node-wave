@@ -16,7 +16,5 @@
     "url": "https://github.com/jaranasaur/node-wave/issues"
   },
   "homepage": "https://github.com/jaranasaur/node-wave#readme",
-  "devDependencies": {
-    "eslint": "^6.5.1"
-  }
+  "devDependencies": {}
 }
